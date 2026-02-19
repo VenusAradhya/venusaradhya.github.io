@@ -78,13 +78,14 @@ body {
 
 .nav-links a:hover { opacity: 1; }
 
-/* Contact button: navy border, image on hover */
+/* Contact button: solid navy fill by default, cow photo on hover */
 .nav-cta {
   display: inline-block;
   padding: 8px 18px;
   border: 2px solid var(--navy);
   border-radius: 6px;
-  color: var(--navy);
+  background: var(--navy);
+  color: var(--cream);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -100,16 +101,28 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('img-japan-night.jpg');
+  background-image: url('img-cow.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center 60%;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+/* Dark overlay on the photo so text stays legible */
+.nav-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  transition: opacity 0.4s ease;
   z-index: -1;
 }
 
 .nav-cta:hover { color: #fff; border-color: transparent; }
 .nav-cta:hover::before { opacity: 1; }
+.nav-cta:hover::after { opacity: 1; }
 
 .nav-toggle {
   display: none;
