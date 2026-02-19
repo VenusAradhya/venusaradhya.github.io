@@ -6,11 +6,11 @@
   --bg-card: #0c1018;
   --bg-section-alt: #080c14;
   --text: #ffffff;
-  --text-muted: #d8e3e8;
+  --text-muted: #b8c0cc;
   --cream: #f5f0e8;
   --navy: #0f172a;
-  --shape-border: 3px solid rgba(255, 255, 255, 0.4);
-  --section-divider: 4px solid rgba(255, 255, 255, 0.1);
+  --shape-border: 2px solid rgba(255, 255, 255, 0.4);
+  --section-divider: 2px solid rgba(255, 255, 255, 0.1);
   --font: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius: 12px;
   --page-padding: 48px;
@@ -45,12 +45,14 @@ body {
 }
 
 .nav-logo {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--navy);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
 }
+
+.nav-logo:hover { opacity: 0.7; }
 
 .nav-right {
   display: flex;
@@ -102,7 +104,7 @@ body {
   content: '';
   position: absolute;
   inset: -2px;
-  background-image: url('images/cow-button.jpg');
+  background-image: url('images/contact-btn.jpg');
   background-size: cover;
   background-position: center center;
   opacity: 0;
@@ -179,7 +181,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('images/skybg.jpg');
+  background-image: url('images/hero.jpg');
   background-size: cover;
   background-position: center 40%;
   z-index: 0;
@@ -245,7 +247,7 @@ body {
 
 .typo-pill-research { background: #1c2b45; border-color: rgba(255,255,255,0.3); }
 .typo-pill-advocacy { background: #111820; border-color: rgba(255,255,255,0.5); }
-.typo-pill-about    { background: #546f7a; border-color: rgba(255,255,255,0.35); }
+.typo-pill-about    { background: #2d3d1e; border-color: rgba(255,255,255,0.35); }
 
 /* ===== PHOTO + WRITING CARDS ===== */
 .home-cards-section {
@@ -281,13 +283,13 @@ body {
 }
 
 .home-card-photo {
-  background-image: url('images/rio-night-zoomedout.jpg');
+  background-image: url('images/photography-card.jpg');
   background-size: cover;
   background-position: center;
 }
 
 .home-card-writing {
-  background-image: url('images/japrainyver.jpg');
+  background-image: url('images/writing-card.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -338,7 +340,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('images/hawaii-ocean-zoomedout.jpg');
+  background-image: url('images/contact-bg.jpg');
   background-size: cover;
   background-position: center;
   z-index: 0;
