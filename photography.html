@@ -9,22 +9,25 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    .photo-page {
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh - 58px);
-    }
-
+    /* Map takes up most of the page — taller */
     #map {
       width: 100%;
       flex: 1;
       min-height: 0;
-      background: #070a12;
+      background: #030507;
     }
 
     .leaflet-container {
-      background: #070a12;
+      background: #030507;
       font-family: 'Poppins', sans-serif;
+    }
+
+    .photo-page {
+      display: flex;
+      flex-direction: column;
+      /* Fill all remaining viewport height below header + hint bar */
+      height: calc(100vh - 58px);
+      min-height: 600px;
     }
 
     .map-hint {
@@ -206,9 +209,14 @@
   <header class="site-header">
     <nav class="nav">
       <a href="index.html" class="nav-logo">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venus Aradhya">
-          <rect x="1.5" y="1.5" width="33" height="33" rx="8.5" stroke="#0f172a" stroke-width="2" fill="none"/>
-          <text x="18" y="24" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="14" fill="#0f172a" letter-spacing="0.5">VA</text>
+        <svg width="140" height="38" viewBox="0 0 140 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venus Aradhya">
+          <text x="0" y="30" font-family="Poppins, sans-serif" font-weight="700" font-size="26" fill="#0f172a" letter-spacing="-0.5">Venus</text>
+          <path d="M 2 33 Q 36 8 72 20 Q 100 28 122 6" stroke="#0f172a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+          <path d="M 2 35 Q 36 12 72 23 Q 102 31 124 9" stroke="#0f172a" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.25"/>
+          <polygon points="123,5 124.2,8.4 127.8,8.4 124.9,10.6 126,14 123,12 120,14 121.1,10.6 118.2,8.4 121.8,8.4" fill="#0f172a" opacity="0.85"/>
+          <circle cx="108" cy="10" r="1.4" fill="#0f172a" opacity="0.45"/>
+          <circle cx="114" cy="7.5" r="0.9" fill="#0f172a" opacity="0.3"/>
+          <circle cx="102" cy="13" r="0.9" fill="#0f172a" opacity="0.2"/>
         </svg>
       </a>
       <div class="nav-right">
@@ -480,7 +488,16 @@
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
     subdomains: 'abcd',
-    maxZoom: 19
+    maxZoom: 19,
+    opacity: 1.0
+  }).addTo(map);
+
+  // Add a dark overlay layer on top of tiles for extra depth
+  const darkOverlay = L.rectangle([[-90, -180], [90, 180]], {
+    color: 'none',
+    fillColor: '#000',
+    fillOpacity: 0.35,
+    interactive: false
   }).addTo(map);
 
   // Group by location name
