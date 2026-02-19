@@ -118,7 +118,7 @@ body {
 
 .nav-links a:hover { opacity: 1; }
 
-/* Get Involved button — navy bordered box (like image 3) */
+/* Contact button — navy border, reveals image on hover */
 .nav-cta {
   display: inline-block;
   padding: 8px 18px;
@@ -131,12 +131,32 @@ body {
   letter-spacing: 0.04em;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s, border-color 0.3s;
+  z-index: 0;
+}
+
+/* Image revealed on hover — replace url() with your own photo path */
+.nav-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('images/contact-hover.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
 }
 
 .nav-cta:hover {
-  background: var(--navy);
-  color: var(--cream);
+  color: #fff;
+  border-color: transparent;
+}
+
+.nav-cta:hover::before {
+  opacity: 1;
 }
 
 .nav-toggle {
@@ -211,11 +231,11 @@ body {
 
 .typo-word {
   font-family: var(--font);
-  font-size: clamp(40px, 7.5vw, 100px);
-  font-weight: 900;
+  font-size: clamp(28px, 4.8vw, 68px);
+  font-weight: 600;
   color: var(--text);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
 /* Inline pill buttons — match screenshot exactly */
@@ -229,8 +249,8 @@ body {
   transition: border-color 0.2s, transform 0.15s;
   vertical-align: middle;
   position: relative;
-  height: clamp(48px, 6.5vw, 88px);
-  padding: 0 clamp(20px, 3vw, 44px);
+  height: clamp(36px, 4.5vw, 60px);
+  padding: 0 clamp(16px, 2.2vw, 36px);
   margin: 4px 0;
 }
 
@@ -241,7 +261,7 @@ body {
 
 .typo-pill-inner {
   font-family: var(--font);
-  font-size: clamp(14px, 1.7vw, 24px);
+  font-size: clamp(11px, 1.2vw, 16px);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #fff;
