@@ -102,11 +102,11 @@ body {
   content: '';
   position: absolute;
   inset: -2px;
-  background-image: url('images/cow button.jpg');
+  background-image: url('images/cow-button.jpg');
   background-size: cover;
   background-position: center center;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.4s ease;
   z-index: -2;
 }
 
@@ -245,7 +245,7 @@ body {
 
 .typo-pill-research { background: #1c2b45; border-color: rgba(255,255,255,0.3); }
 .typo-pill-advocacy { background: #111820; border-color: rgba(255,255,255,0.5); }
-.typo-pill-about    { background: #819aa6; border-color: rgba(255,255,255,0.35); }
+.typo-pill-about    { background: #546f7a; border-color: rgba(255,255,255,0.35); }
 
 /* ===== PHOTO + WRITING CARDS ===== */
 .home-cards-section {
@@ -287,7 +287,7 @@ body {
 }
 
 .home-card-writing {
-  background-image: url('images/japrainyhor.jpg');
+  background-image: url('images/japrainyver.jpg');
   background-size: cover;
   background-position: center;
 }
