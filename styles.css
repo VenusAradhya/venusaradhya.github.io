@@ -78,7 +78,7 @@ body {
 
 .nav-links a:hover { opacity: 1; }
 
-/* Contact button: solid navy fill by default, cow photo on hover */
+/* Contact button: solid navy, Japan lantern photo on hover */
 .nav-cta {
   display: inline-block;
   padding: 8px 18px;
@@ -93,28 +93,29 @@ body {
   white-space: nowrap;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   transition: color 0.35s, border-color 0.35s;
-  z-index: 0;
 }
 
+/* Photo layer behind text */
 .nav-cta::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: url('img-cow.jpg');
+  inset: -2px;
+  background-image: url('images/contact-btn.jpg');
   background-size: cover;
-  background-position: center 60%;
+  background-position: center center;
   opacity: 0;
   transition: opacity 0.4s ease;
-  z-index: -1;
+  z-index: -2;
 }
 
-/* Dark overlay on the photo so text stays legible */
+/* Darkening overlay behind text but above photo */
 .nav-cta::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.45);
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: -1;
@@ -178,9 +179,9 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('img-hero.jpg');
+  background-image: url('images/hero.jpg');
   background-size: cover;
-  background-position: center top;
+  background-position: center 40%;
   z-index: 0;
 }
 
@@ -280,13 +281,13 @@ body {
 }
 
 .home-card-photo {
-  background-image: url('img-cliff.jpg');
+  background-image: url('images/photography-card.jpg');
   background-size: cover;
   background-position: center;
 }
 
 .home-card-writing {
-  background-image: url('img-birds.jpg');
+  background-image: url('images/writing-card.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -337,7 +338,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('img-city-night.jpg');
+  background-image: url('images/contact-bg.jpg');
   background-size: cover;
   background-position: center;
   z-index: 0;
