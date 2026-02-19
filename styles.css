@@ -6,11 +6,11 @@
   --bg-card: #0c1018;
   --bg-section-alt: #080c14;
   --text: #ffffff;
-  --text-muted: #b8c0cc;
+  --text-muted: #d8e3e8;
   --cream: #f5f0e8;
   --navy: #0f172a;
-  --shape-border: 2px solid rgba(255, 255, 255, 0.4);
-  --section-divider: 2px solid rgba(255, 255, 255, 0.1);
+  --shape-border: 3px solid rgba(255, 255, 255, 0.4);
+  --section-divider: 4px solid rgba(255, 255, 255, 0.1);
   --font: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius: 12px;
   --page-padding: 48px;
