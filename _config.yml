@@ -1,2 +1,7 @@
 title: Venus Aradhya
 description: Researcher · Advocate · Photographer
+
+# Tell GitHub Pages to serve video files correctly
+include:
+  - "*.mp4"
+  - "*.webm"
