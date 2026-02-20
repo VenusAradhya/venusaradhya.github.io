@@ -208,14 +208,9 @@
   <header class="site-header">
     <nav class="nav">
       <a href="index.html" class="nav-logo">
-        <svg width="140" height="38" viewBox="0 0 140 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venus Aradhya">
-          <text x="0" y="30" font-family="Poppins, sans-serif" font-weight="700" font-size="26" fill="#0f172a" letter-spacing="-0.5">Venus</text>
-          <path d="M 2 33 Q 36 8 72 20 Q 100 28 122 6" stroke="#0f172a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
-          <path d="M 2 35 Q 36 12 72 23 Q 102 31 124 9" stroke="#0f172a" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.25"/>
-          <polygon points="123,5 124.2,8.4 127.8,8.4 124.9,10.6 126,14 123,12 120,14 121.1,10.6 118.2,8.4 121.8,8.4" fill="#0f172a" opacity="0.85"/>
-          <circle cx="108" cy="10" r="1.4" fill="#0f172a" opacity="0.45"/>
-          <circle cx="114" cy="7.5" r="0.9" fill="#0f172a" opacity="0.3"/>
-          <circle cx="102" cy="13" r="0.9" fill="#0f172a" opacity="0.2"/>
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venus Aradhya">
+          <rect x="1.5" y="1.5" width="41" height="41" rx="10" stroke="#0f172a" stroke-width="2" fill="none"/>
+          <text x="22" y="29" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing="1">VA</text>
         </svg>
       </a>
       <div class="nav-right">
@@ -484,11 +479,12 @@
     zoomControl: true,
   });
 
-  // Green topographic tiles — Stadia Alidade Smooth Dark (earthy/terrain feel)
-  L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; OpenStreetMap',
-    maxZoom: 20,
-    opacity: 0.92
+  // OpenTopoMap — free, no API key, green topographic style
+  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors, &copy; OpenTopoMap (CC-BY-SA)',
+    subdomains: 'abc',
+    maxZoom: 17,
+    opacity: 1.0
   }).addTo(map);
 
   // Group by location name
