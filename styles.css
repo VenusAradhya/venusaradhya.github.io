@@ -32,10 +32,10 @@ body {
 .site-header {
   position: relative;
   z-index: 10;
-  background: rgba(7, 10, 18, 0.75);
+  background: rgba(7,10,18,0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .nav {
@@ -70,11 +70,10 @@ body {
 }
 
 .nav-links a {
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.8);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  opacity: 1;
   transition: color 0.2s;
 }
 
@@ -84,7 +83,7 @@ body {
 .nav-cta {
   display: inline-block;
   padding: 8px 18px;
-  border: 1.5px solid rgba(255,255,255,0.45);
+  border: 1.5px solid rgba(255,255,255,0.4);
   border-radius: 6px;
   background: rgba(255,255,255,0.06);
   color: rgba(255,255,255,0.9);
@@ -187,11 +186,21 @@ body {
   z-index: 0;
 }
 
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  z-index: 0;
+}
+
 .typo-hero::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, rgba(5,8,18,0.52) 0%, rgba(5,8,18,0.3) 50%, rgba(5,8,18,0.68) 100%);
+  background: linear-gradient(to right, rgba(5,8,18,0.92) 0%, rgba(5,8,18,0.75) 38%, rgba(5,8,18,0.3) 65%, rgba(5,8,18,0.05) 100%);
   z-index: 1;
 }
 
@@ -350,28 +359,8 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(5, 8, 20, 0.42);
+  background: rgba(5, 8, 20, 0.40);
   z-index: 1;
-}
-
-
-/* ===== CONTACT BLOCK (new minimal style) ===== */
-.contact-block {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.contact-reach {
-  font-size: clamp(28px, 4vw, 56px);
-  font-weight: 800;
-  color: var(--text);
-  margin: 0;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
 }
 
 .get-involved-block {
@@ -384,27 +373,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  
-/* ===== CONTACT BLOCK (new minimal style) ===== */
-.contact-block {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.contact-reach {
-  font-size: clamp(28px, 4vw, 56px);
-  font-weight: 800;
-  color: var(--text);
-  margin: 0;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.get-involved-block { grid-template-columns: 1fr; gap: 32px; }
+  .get-involved-block { grid-template-columns: 1fr; gap: 32px; }
 }
 
 .get-involved-title {
@@ -446,6 +415,25 @@ body {
 .contact-pill:hover {
   border-color: rgba(255,255,255,0.8);
   background: rgba(255,255,255,0.08);
+}
+
+/* ===== CONTACT BLOCK ===== */
+.contact-block {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.contact-reach {
+  font-size: clamp(28px, 4vw, 56px);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 /* ===== FOOTER ===== */
