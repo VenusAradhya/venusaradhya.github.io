@@ -9,198 +9,128 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    /* Map takes up most of the page — taller */
-    #map {
-      width: 100%;
-      flex: 1;
-      min-height: 0;
-      background: #2d3b2a;
-    }
+    body { margin:0; background:#070a12; }
 
-    .leaflet-container {
-      background: #2d3b2a;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .photo-page {
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh - 58px);
-      min-height: 600px;
-    }
+    .photo-page { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
 
     .map-hint {
-      padding: 10px 48px;
+      padding: 9px 48px;
       background: rgba(7,10,18,0.95);
       border-bottom: 1px solid rgba(255,255,255,0.07);
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.5);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0; letter-spacing: 0.04em;
     }
-
     .map-hint-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.45);
-      flex-shrink: 0;
-      animation: pulse 2s infinite;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.35); flex-shrink: 0;
+      animation: pulse 2.5s infinite;
     }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    #map { width:100%; flex:1; min-height:0; background:#080c10; }
+    .leaflet-container { background:#080c10; font-family:'Poppins',sans-serif; }
 
-    /* Drawer */
-    #photo-drawer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #0c1018;
-      border-top: 2px solid rgba(255,255,255,0.12);
-      transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
-      max-height: 75vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #photo-drawer.is-open { transform: translateY(0); }
-
-    .drawer-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 32px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      flex-shrink: 0;
-    }
-
-    .drawer-location {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .drawer-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .drawer-close {
-      background: none;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      color: rgba(255,255,255,0.5);
-      font-size: 16px;
-      width: 34px; height: 34px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .drawer-close:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
-
-    .drawer-photos {
-      display: flex;
-      gap: 20px;
-      padding: 20px 32px 28px;
-      overflow-x: auto;
-      flex: 1;
-      align-items: flex-start;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .drawer-photos::-webkit-scrollbar { height: 3px; }
-    .drawer-photos::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
-    .drawer-photos::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
-
-    .drawer-photo-item {
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 320px;
-    }
-
-    .drawer-photo-item img {
-      height: 220px;
-      width: auto;
-      max-width: 320px;
-      object-fit: cover;
-      border-radius: 8px;
-      display: block;
-      border: 1.5px solid rgba(255,255,255,0.08);
-      transition: border-color 0.2s;
-    }
-
-    .drawer-photo-item:hover img { border-color: rgba(255,255,255,0.3); }
-
-    .drawer-photo-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .drawer-photo-caption {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.75);
-    }
-
-    /* Description — shown if set, invisible but space-preserving if empty */
-    .drawer-photo-desc {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.5;
-      font-style: italic;
-      min-height: 18px; /* preserves space even when empty */
-    }
-
-    /* Map markers — dark navy to contrast topo map */
     .custom-marker {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: #0f172a;
-      border: 2.5px solid rgba(255,255,255,0.8);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      cursor: pointer;
-      transition: transform 0.15s;
+      width:12px; height:12px; border-radius:50%;
+      background:rgba(255,255,255,0.85);
+      border:1.5px solid rgba(255,255,255,0.3);
+      box-shadow:0 0 8px rgba(255,255,255,0.3);
+      cursor:pointer; transition:transform 0.15s;
     }
-
-    .custom-marker:hover { transform: scale(1.5); }
-    .custom-marker.active { box-shadow: 0 0 14px rgba(15,23,42,0.8); transform: scale(1.3); }
+    .custom-marker:hover { transform:scale(1.6); }
 
     .leaflet-popup-content-wrapper {
-      background: #0c1018;
-      border: 1.5px solid rgba(255,255,255,0.15);
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      background:#0c1018; border:1px solid rgba(255,255,255,0.12);
+      border-radius:8px; color:#fff; font-family:'Poppins',sans-serif;
     }
+    .leaflet-popup-tip { background:#0c1018; }
+    .leaflet-popup-content { margin:10px 14px; font-size:13px; font-weight:500; color:rgba(255,255,255,0.8); }
+    .leaflet-popup-close-button { color:rgba(255,255,255,0.4) !important; }
 
-    .leaflet-popup-tip { background: #0c1018; }
-    .leaflet-popup-content { margin: 10px 14px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); }
-    .leaflet-popup-close-button { color: rgba(255,255,255,0.4) !important; }
-
-    @media (max-width: 640px) {
-      .map-hint { padding: 10px 20px; }
-      .drawer-header { padding: 14px 20px; }
-      .drawer-photos { padding: 16px 20px 20px; gap: 14px; }
-      .drawer-photo-item img { height: 170px; }
+    /* ── COLLAGE OVERLAY ── */
+    #collage-overlay {
+      position:fixed; inset:0;
+      background:rgba(4,6,12,0.97);
+      z-index:2000; display:flex; flex-direction:column;
+      opacity:0; pointer-events:none; transition:opacity 0.3s;
     }
+    #collage-overlay.open { opacity:1; pointer-events:all; }
+
+    .collage-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 36px; border-bottom:1px solid rgba(255,255,255,0.07);
+      flex-shrink:0;
+    }
+    .collage-loc { font-size:10px; font-weight:600; letter-spacing:0.14em;
+      text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:3px; }
+    .collage-title { font-size:20px; font-weight:700; color:#fff; }
+    .collage-close {
+      background:none; border:1px solid rgba(255,255,255,0.2); border-radius:6px;
+      color:rgba(255,255,255,0.5); font-size:18px; width:36px; height:36px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s;
+    }
+    .collage-close:hover { border-color:#fff; color:#fff; }
+
+    /* masonry grid */
+    .collage-grid {
+      overflow-y:auto; flex:1;
+      padding:20px 28px 40px;
+      columns:4; column-gap:10px;
+    }
+    @media(max-width:1100px){.collage-grid{columns:3}}
+    @media(max-width:700px){.collage-grid{columns:2}}
+    .collage-grid::-webkit-scrollbar{width:3px}
+    .collage-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+    /* 1-2 photos: big centered flex */
+    .collage-grid.few { columns:unset; display:flex; gap:10px; align-items:flex-start; justify-content:center; }
+    .collage-grid.few .collage-item { flex:1; max-width:580px; }
+
+    .collage-item {
+      break-inside:avoid; margin-bottom:10px;
+      cursor:pointer; border-radius:6px; overflow:hidden;
+    }
+    .collage-item img {
+      width:100%; display:block; border-radius:6px;
+      transition:transform 0.3s, filter 0.3s;
+      filter:brightness(0.9);
+    }
+    .collage-item:hover img { transform:scale(1.02); filter:brightness(1.05); }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      position:fixed; inset:0;
+      background:rgba(2,3,8,0.97);
+      z-index:3000; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:50px 60px 36px;
+      opacity:0; pointer-events:none; transition:opacity 0.25s;
+    }
+    #lightbox.open { opacity:1; pointer-events:all; }
+
+    #lb-img {
+      max-width:100%; max-height:calc(100vh - 180px);
+      object-fit:contain; border-radius:4px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.9);
+    }
+    .lb-caption-block { margin-top:18px; text-align:center; max-width:680px; }
+    .lb-caption { font-size:14px; font-weight:600; color:rgba(255,255,255,0.9); letter-spacing:0.02em; }
+    .lb-desc { margin-top:7px; font-size:12px; color:rgba(255,255,255,0.38);
+      line-height:1.7; font-style:italic; }
+    .lb-loc { display:inline-block; margin-top:9px; font-size:10px; font-weight:600;
+      letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.22); }
+
+    .lb-close {
+      position:fixed; top:18px; right:22px;
+      background:none; border:1px solid rgba(255,255,255,0.2); border-radius:6px;
+      color:rgba(255,255,255,0.5); font-size:18px; width:36px; height:36px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s;
+    }
+    .lb-close:hover { border-color:#fff; color:#fff; }
   </style>
 </head>
 <body class="page-inner">
@@ -209,8 +139,8 @@
     <nav class="nav">
       <a href="index.html" class="nav-logo">
         <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venus Aradhya">
-          <rect x="1.5" y="1.5" width="41" height="41" rx="10" stroke="#0f172a" stroke-width="2" fill="none"/>
-          <text x="22" y="29" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing="1">VA</text>
+          <rect x="1.5" y="1.5" width="41" height="41" rx="10" stroke="rgba(255,255,255,0.85)" stroke-width="2" fill="none"/>
+          <text x="22" y="29" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="16" fill="rgba(255,255,255,0.95)" letter-spacing="1">VA</text>
         </svg>
       </a>
       <div class="nav-right">
@@ -218,46 +148,46 @@
           <li><a href="about.html">me</a></li>
           <li><a href="research.html">research</a></li>
           <li><a href="advocacy.html">advocacy</a></li>
-          <li><a href="photography.html" aria-current="page">photography</a></li>
+          <li><a href="photography.html">photography</a></li>
           <li><a href="writing.html">writing</a></li>
         </ul>
         <a href="index.html#contact" class="nav-cta">contact</a>
       </div>
-      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
     </nav>
   </header>
 
   <div class="map-hint">
-    <div class="map-hint-dot"></div>
-    Click anywhere on the map to find the nearest photos from that location
+    <span class="map-hint-dot"></span>
+    Click anywhere on the map to explore photos from that location
   </div>
 
-  <div class="photo-page">
-    <div id="map"></div>
-  </div>
+  <div id="map"></div>
 
-  <div id="photo-drawer" role="dialog" aria-modal="true" aria-label="Photos from this location">
-    <div class="drawer-header">
+  <!-- COLLAGE OVERLAY -->
+  <div id="collage-overlay">
+    <div class="collage-header">
       <div>
-        <div class="drawer-location" id="drawer-location">—</div>
-        <div class="drawer-title" id="drawer-title">Photos nearby</div>
+        <div class="collage-loc" id="col-loc"></div>
+        <div class="collage-title" id="col-title"></div>
       </div>
-      <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
+      <button class="collage-close" id="col-close">&#x2715;</button>
     </div>
-    <div class="drawer-photos" id="drawer-photos"></div>
+    <div class="collage-grid" id="col-grid"></div>
   </div>
 
-  <script src="script.js"></script>
-  <script>
-  // =============================================
-  // PHOTO DATA
-  // - file: path relative to this HTML file
-  // - caption: short title shown under photo
-  // - description: optional longer note (leave "" to hide)
-  // - location: display name shown in drawer header
-  // - lat/lng: decimal coordinates (Google Maps → right-click → copy coords)
-  // =============================================
-  const PHOTOS = [
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button class="lb-close" id="lb-close">&#x2715;</button>
+    <img id="lb-img" src="" alt="" />
+    <div class="lb-caption-block">
+      <div class="lb-caption" id="lb-caption"></div>
+      <div class="lb-desc" id="lb-desc"></div>
+      <span class="lb-loc" id="lb-loc"></span>
+    </div>
+  </div>
+
+<script>
+const PHOTOS = [
     {
       file: "images/hero.jpg",
       caption: "Stormy sea at dusk",
@@ -470,112 +400,90 @@
     }
   ];
 
-  // =============================================
-  // MAP INIT — dark CartoDB tiles, no API key needed
-  // =============================================
-  const map = L.map('map', {
-    center: [25, 10],
-    zoom: 2,
-    zoomControl: true,
+const map = L.map('map', { center:[25,10], zoom:2 });
+
+L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors, &copy; OpenTopoMap (CC-BY-SA)',
+  subdomains: 'abc', maxZoom: 17
+}).addTo(map);
+
+// Group photos by location
+const groups = {};
+PHOTOS.forEach(p => {
+  if (!groups[p.location]) groups[p.location] = [];
+  groups[p.location].push(p);
+});
+
+// Place markers
+const markers = [];
+Object.entries(groups).forEach(([loc, photos]) => {
+  const lat = photos.reduce((s,p)=>s+p.lat,0)/photos.length;
+  const lng = photos.reduce((s,p)=>s+p.lng,0)/photos.length;
+  const icon = L.divIcon({ html:'<div class="custom-marker"></div>', className:'', iconSize:[12,12], iconAnchor:[6,6] });
+  const m = L.marker([lat,lng],{icon}).addTo(map)
+    .bindPopup(`<strong>${loc}</strong><br>${photos.length} photo${photos.length>1?'s':''}`,{offset:[0,-10]});
+  m._d = {loc, photos, lat, lng};
+  markers.push(m);
+  m.on('click', ()=>openCollage(m._d));
+});
+
+// Click map -> nearest location
+map.on('click', e => {
+  let nearest=null, best=Infinity;
+  markers.forEach(m => {
+    const R=6371, dLat=(m._d.lat-e.latlng.lat)*Math.PI/180, dLng=(m._d.lng-e.latlng.lng)*Math.PI/180;
+    const a=Math.sin(dLat/2)**2+Math.cos(e.latlng.lat*Math.PI/180)*Math.cos(m._d.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+    const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    if(d<best){best=d;nearest=m._d;}
   });
+  if(nearest) openCollage(nearest);
+});
 
-  // Green topographic tiles — Stadia Alidade Smooth Dark (earthy/terrain feel)
-  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors, &copy; OpenTopoMap (CC-BY-SA)',
-    subdomains: 'abc',
-    maxZoom: 17
-  }).addTo(map);
+// ── COLLAGE ──
+const overlay  = document.getElementById('collage-overlay');
+const colGrid  = document.getElementById('col-grid');
 
-  // Group by location name
-  const locationGroups = {};
-  PHOTOS.forEach(p => {
-    if (!locationGroups[p.location]) locationGroups[p.location] = [];
-    locationGroups[p.location].push(p);
+function openCollage({loc, photos}) {
+  document.getElementById('col-loc').textContent = loc;
+  document.getElementById('col-title').textContent = photos.length===1 ? '1 photo' : `${photos.length} photos`;
+  colGrid.innerHTML = '';
+  colGrid.className = 'collage-grid' + (photos.length <= 2 ? ' few' : '');
+
+  photos.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'collage-item';
+    item.onclick = () => openLightbox(p);
+    const img = document.createElement('img');
+    img.src = p.file; img.alt = p.caption; img.loading = 'lazy';
+    item.appendChild(img);
+    colGrid.appendChild(item);
   });
+  overlay.classList.add('open');
+}
 
-  // Place markers
-  const markers = [];
-  Object.entries(locationGroups).forEach(([locName, photos]) => {
-    const avgLat = photos.reduce((s, p) => s + p.lat, 0) / photos.length;
-    const avgLng = photos.reduce((s, p) => s + p.lng, 0) / photos.length;
+document.getElementById('col-close').onclick = () => overlay.classList.remove('open');
 
-    const icon = L.divIcon({
-      html: '<div class="custom-marker"></div>',
-      className: '',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7]
-    });
+// ── LIGHTBOX ──
+const lb = document.getElementById('lightbox');
 
-    const marker = L.marker([avgLat, avgLng], { icon })
-      .addTo(map)
-      .bindPopup(`<strong>${locName}</strong><br>${photos.length} photo${photos.length > 1 ? 's' : ''}`, { offset: [0, -10] });
+function openLightbox(p) {
+  document.getElementById('lb-img').src = p.file;
+  document.getElementById('lb-img').alt = p.caption;
+  document.getElementById('lb-caption').textContent = p.caption;
+  document.getElementById('lb-desc').textContent = p.description || '';
+  document.getElementById('lb-loc').textContent = p.location;
+  lb.classList.add('open');
+}
 
-    marker._photoData = { locName, photos, lat: avgLat, lng: avgLng };
-    markers.push(marker);
-    marker.on('click', () => openDrawer(marker._photoData));
-  });
+document.getElementById('lb-close').onclick = () => lb.classList.remove('open');
+lb.onclick = e => { if(e.target===lb) lb.classList.remove('open'); };
 
-  // Click anywhere → nearest location
-  map.on('click', function(e) {
-    let nearest = null, minDist = Infinity;
-    markers.forEach(m => {
-      const d = haversine(e.latlng.lat, e.latlng.lng, m._photoData.lat, m._photoData.lng);
-      if (d < minDist) { minDist = d; nearest = m._photoData; }
-    });
-    if (nearest) openDrawer(nearest);
-  });
-
-  function haversine(lat1, lng1, lat2, lng2) {
-    const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
-    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') {
+    if(lb.classList.contains('open')) lb.classList.remove('open');
+    else overlay.classList.remove('open');
   }
-
-  // =============================================
-  // DRAWER
-  // =============================================
-  const drawer = document.getElementById('photo-drawer');
-  const drawerLocation = document.getElementById('drawer-location');
-  const drawerTitle = document.getElementById('drawer-title');
-  const drawerPhotos = document.getElementById('drawer-photos');
-
-  function openDrawer({ locName, photos }) {
-    drawerLocation.textContent = locName;
-    drawerTitle.textContent = `${photos.length} photo${photos.length > 1 ? 's' : ''} from here`;
-    drawerPhotos.innerHTML = '';
-
-    photos.forEach(p => {
-      const item = document.createElement('div');
-      item.className = 'drawer-photo-item';
-
-      const img = document.createElement('img');
-      img.src = p.file;
-      img.alt = p.caption;
-      img.loading = 'lazy';
-
-      const meta = document.createElement('div');
-      meta.className = 'drawer-photo-meta';
-
-      const cap = document.createElement('div');
-      cap.className = 'drawer-photo-caption';
-      cap.textContent = p.caption;
-
-      const desc = document.createElement('div');
-      desc.className = 'drawer-photo-desc';
-      desc.textContent = p.description || '';
-
-      meta.appendChild(cap);
-      meta.appendChild(desc);
-      item.appendChild(img);
-      item.appendChild(meta);
-      drawerPhotos.appendChild(item);
-    });
-
-    drawer.classList.add('is-open');
-  }
-
-  document.getElementById('drawer-close').addEventListener('click', () => drawer.classList.remove('is-open'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') drawer.classList.remove('is-open'); });
-  </script>
+});
+</script>
 </body>
 </html>
